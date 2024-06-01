@@ -12,13 +12,15 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@org.springframework.boot.autoconfigure.domain.EntityScan("com.*")
+//@org.springframework.data.jpa.repository.config.EnableJpaRepositories("com.*")
+@org.springframework.context.annotation.ComponentScan(basePackages = { "com.*" })
 @RestController
 @RequestMapping("/api/orders")
 public class OrdersController {
 
-    private final OrdersRepository ordersRepository;
-    private final OrderItemsRepository orderItemsRepository;
+    private final JdbcClientOrdersRepository jdbcClientOrdersRepository;
+    private final JdbcClientOrderItemsRepository JdbcClientOrderItemsRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(OrdersController.class);
 
@@ -34,7 +36,7 @@ public class OrdersController {
         order.setTotalPrice(orderData.getTotalPrice().doubleValue());
         order.setStatus("Pending"); // 设置初始订单状态
 
-        Orders savedOrder = ordersRepository.save(order);
+        Orders savedOrder = jdbcClientOrdersRepository.save(order);
 
         // 创建并保存订单项
         List<String> items = orderData.getItems();
@@ -44,50 +46,50 @@ public class OrdersController {
             orderItem.setMenuItemId(Integer.parseInt(item)); // 假设 item 是 menu_item_id
             orderItem.setQuantity(1); // 设置数量，这里假设每项商品数量为1
 
-            orderItemsRepository.save(orderItem);
+            jdbcClientOrderItemsRepository.save(orderItem);
         }
 
         return "Order confirmed successfully";
     }
 
-    public OrdersController(OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository) {
-        this.ordersRepository = ordersRepository;
-        this.orderItemsRepository = orderItemsRepository;
+    public OrdersController(JdbcClientOrdersRepository jdbcClientOrdersRepository, JdbcClientOrderItemsRepository JdbcClientOrderItemsRepository) {
+        this.jdbcClientOrdersRepository = jdbcClientOrdersRepository;
+        this.JdbcClientOrderItemsRepository = JdbcClientOrderItemsRepository;
     }
 
     @GetMapping("")
     public List<Orders> findAll(){
-        return StreamSupport.stream(ordersRepository.findAll().spliterator(), false)
+        return StreamSupport.stream(jdbcClientOrdersRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Orders findById(@PathVariable Integer id){
-        return ordersRepository.findById(id)
+    public Orders existsById(@PathVariable Integer id){
+        return jdbcClientOrdersRepository.findById(id)
                 .orElseThrow(OrdersNotFoundException::new);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Orders create(@RequestBody Orders orders){
-        return ordersRepository.save(orders);
+        return jdbcClientOrdersRepository.save(orders);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Orders orders, @PathVariable Integer id){
-        if (!ordersRepository.existsById(id)) {
+        if (!jdbcClientOrdersRepository.existsById(id)) {
             throw new OrdersNotFoundException();
         }
-        ordersRepository.save(orders);
+        jdbcClientOrdersRepository.save(orders);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id){
-        if (!ordersRepository.existsById(id)) {
+        if (!jdbcClientOrdersRepository.existsById(id)) {
             throw new OrdersNotFoundException();
         }
-        ordersRepository.deleteById(id);
+        jdbcClientOrdersRepository.delete(id);
     }
 }

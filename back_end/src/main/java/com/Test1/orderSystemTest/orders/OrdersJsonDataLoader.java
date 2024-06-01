@@ -14,10 +14,10 @@ import java.io.InputStream;
 public class OrdersJsonDataLoader{
 
     private static final Logger log = LoggerFactory.getLogger(OrdersJsonDataLoader.class);
-    private final OrdersRepository ordersRepository;
+    private final JdbcClientOrdersRepository JdbcClientOrdersRepository;
     private final ObjectMapper objectMapper;
-    public OrdersJsonDataLoader(OrdersRepository ordersRepository, ObjectMapper objectMapper){
-        this.ordersRepository = ordersRepository;
+    public OrdersJsonDataLoader(JdbcClientOrdersRepository JdbcClientOrdersRepository, ObjectMapper objectMapper){
+        this.JdbcClientOrdersRepository = JdbcClientOrdersRepository;
         this.objectMapper = objectMapper;
     }
 

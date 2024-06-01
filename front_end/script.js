@@ -33,8 +33,7 @@ function addToOrder(event) {
 
 function removeFromOrder(event) {
     if (event.target.classList.contains('delete-btn')) {
-        const itemPrice
-        = parseInt(event.target.getAttribute('data-price'));
+        const itemPrice = parseInt(event.target.getAttribute('data-price'));
         const listItem = event.target.parentElement;
         order.removeChild(listItem);
         

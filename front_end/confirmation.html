@@ -60,9 +60,9 @@
             // 发送 POST 请求给后端
             fetch('/api/orders/confirm', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: new Headers({
+                     'Content-Type': 'application/json'
+                 }),
                 body: JSON.stringify(orderData)
             })
             .then(response => {

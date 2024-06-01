@@ -52,12 +52,12 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- Logback for Logging -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.6</version> <!-- 根据您的需求选择版本 -->
-        </dependency>
+        <!--Logback for Logging-->
+        <!--<dependency>-->
+            <!--<groupId>ch.qos.logback</groupId>-->
+            <!--<artifactId>logback-classic</artifactId>-->
+            <!--<version>1.2.6</version>  根据您的需求选择版本 -->
+        <!--</dependency>-->
 
         <!-- JPA Dependency to resolve javax.persistence issues -->
         <dependency>

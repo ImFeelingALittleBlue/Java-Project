@@ -32,6 +32,12 @@ public class JdbcClientOrdersRepository {
                 .optional();
     }
 
+    public boolean existsById(Integer id) {
+        int count = jdbcClient.sql("SELECT * FROM orders").query().listOfRows().size();
+        return count > 0;
+    }
+
+
     public void create(Orders orders) {
         var updated = jdbcClient.sql("INSERT INTO orders(order_time, customer_name, customer_number, total_price, status) VALUES(?, ?, ?, ?, ?)")
                 .params(List.of(orders.getOrderTime(), orders.getCustomerName(), orders.getCustomerNumber(), orders.getTotalPrice(), orders.getStatus()))
@@ -59,6 +65,16 @@ public class JdbcClientOrdersRepository {
     public int count() {
         return jdbcClient.sql("SELECT * FROM orders").query().listOfRows().size();
     }
+
+    public Orders save(Orders orders) {
+        if (orders.getId() == null) {
+            create(orders);
+        } else {
+            update(orders, orders.getId());
+        }
+        return orders;
+    }
+
 
     public void saveAll(List<Orders> orders) {
         orders.forEach(this::create);

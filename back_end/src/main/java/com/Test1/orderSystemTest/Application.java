@@ -1,7 +1,7 @@
 package com.Test1.orderSystemTest;
 
 import com.Test1.orderSystemTest.orders.Orders;
-import com.Test1.orderSystemTest.orders.OrdersRepository;
+import com.Test1.orderSystemTest.orders.JdbcClientOrdersRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+@org.springframework.boot.autoconfigure.domain.EntityScan("com.*")
+//@org.springframework.data.jpa.repository.config.EnableJpaRepositories("com.*")
+@org.springframework.context.annotation.ComponentScan(basePackages = { "com.*" })
 @SpringBootApplication
 public class Application {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
@@ -21,7 +24,7 @@ public class Application {
     }
 
     @Bean
-    public CommandLineRunner runner(OrdersRepository ordersRepository) {
+    public CommandLineRunner runner(JdbcClientOrdersRepository jdbcClientOrdersRepository) {
         return args -> {
             List<Orders> ordersList = Arrays.asList(
                 new Orders(1, LocalDateTime.now(), "Eric", "0966109152", 100.0, "note"),
@@ -35,7 +38,7 @@ public class Application {
                 new Orders(9, LocalDateTime.now(), "Grace", "0988990011", 900.0, "note"),
                 new Orders(10, LocalDateTime.now(), "Hannah", "0999001122", 1000.0, "note")
             );
-            ordersRepository.saveAll(ordersList);
+            jdbcClientOrdersRepository.saveAll(ordersList);
             log.info("Orders have been inserted into the database.");
         };
     }

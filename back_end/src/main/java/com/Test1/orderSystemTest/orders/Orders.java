@@ -2,7 +2,7 @@ package com.Test1.orderSystemTest.orders;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@org.springframework.boot.autoconfigure.domain.EntityScan("com.*")
 @Entity
 @Table(name = "orders")
 public class Orders {

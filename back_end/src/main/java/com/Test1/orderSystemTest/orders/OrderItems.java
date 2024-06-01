@@ -2,6 +2,7 @@ package com.Test1.orderSystemTest.orders;
 
 import javax.persistence.*;
 
+//@org.springframework.boot.autoconfigure.domain.EntityScan("com.*")
 @Entity
 @Table(name = "order_items")
 public class OrderItems {
